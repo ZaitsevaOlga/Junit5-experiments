@@ -1,0 +1,5 @@
+profile: cli
+defaultPackage: junit5.with.micronaut
+---
+testFramework: junit
+sourceLanguage: java

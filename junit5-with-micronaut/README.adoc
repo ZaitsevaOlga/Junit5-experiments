@@ -1,0 +1,37 @@
+= Junit5 Micronaut Tests
+
+This project contains simple tests of Github rest api written on Junit5 with Micronaut.
+
+== Used technologies:
+
+1. Junit5 (test framework)
+2. Micronaut core (dependency injection)
+3. Micronaut http client
+
+== Project structure
+
+2 test classes are available:
+
+_EchoTest_ - Jnit5 tests for `Hello, World!` with Nested and Parametrized tests
+
+_GithubApiTest_ - Jnit5 tests for github rest api in BDD style with steps defined in _RepoSteps.java_ and _ForkSteps.java_ and _StepsParameterResolver.java_ for dependency injection to test class.
+
+Tests are executed in parallel on class level, i.e. test methods from the same class executed in parallel, test classes executed sequentially.
+
+_Junit5WithMicronautCommand.java_ - main class, that start execution of all tests
+
+Preparing executable jar for test execution with micronaut
+
+=== How to run
+1. `mvn clean package` - to build the project and prepare jar
+2. `java -javaagent:"org/aspectj/aspectjweaver/1.9.5/aspectjweaver-1.9.5.jar" -jar target/junit5-with-micronaut-0.1.jar` - to start execution
+3. `mvn allure:report` - to generate allure report
+
+NOTE: _Aspectjweaver_ is required for correct allure reporting. Without it BDD-style steps will be missed in the report
+
+=== Found issues
+
+* Used dirty solution with ApplicationContext saved in static variable to be able to use it from _SpringParameterResolver.java_. The reason is an unavailability to extend Junit5 tests with instance of class.
+* The is no integration of Allure with Micronaut Http Client, hense implemented _AllureLoggingFilter.java_ to add request/response attachments to the report
+* Used cast from _Publisher_ to _Flowable_ to add Allure response handling
+
