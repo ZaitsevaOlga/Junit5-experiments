@@ -13,6 +13,7 @@ import static org.junit.platform.engine.discovery.DiscoverySelectors.selectPacka
 public class TestRunner {
 
     public static void main(String[] args) {
+        long startTime = System.nanoTime();
         LauncherDiscoveryRequest request = LauncherDiscoveryRequestBuilder.request()
                 .selectors(
                         selectPackage("ozaitseva.experiments.junit5.vanila")
@@ -27,5 +28,8 @@ public class TestRunner {
         launcher.registerTestExecutionListeners(testExecutionListeners);
 
         launcher.execute(request);
+        long endTime = System.nanoTime();
+        long totalTime = endTime - startTime;
+        System.out.println("Execution time: " + totalTime);
     }
 }

@@ -11,6 +11,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 class StepsParameterResolver implements ParameterResolver {
 
+    public static final String GITHUB_TOKEN = System.getProperty("github.token");
+
     private final GithubApiClient githubApiClient;
     private final RepoSteps repoSteps;
     private final ForkSteps forkSteps;

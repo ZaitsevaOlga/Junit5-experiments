@@ -1,11 +1,12 @@
 package ozaitseva.experiments.junit5.micronaut;
 
-import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.qameta.allure.Step;
-import io.reactivex.Single;
 import lombok.RequiredArgsConstructor;
+import retrofit2.Call;
+import retrofit2.Response;
 
 import javax.inject.Singleton;
+import java.io.IOException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -14,14 +15,18 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @Singleton
 @RequiredArgsConstructor
 class ForkSteps {
+
+    private final GithubApiClientProperties githubApiClientProperties;
     private final GithubApiClient githubApiClient;
 
     @Step("When getting forks for repo {owner}/{name}")
     List<RepoSearchResult.Repo> whenGetForks(String owner, String name) {
         try {
-            Single<List<RepoSearchResult.Repo>> forksRequest = githubApiClient.getForks(owner, name);
-            return forksRequest.blockingGet();
-        } catch (HttpClientResponseException e) {
+            Call<List<RepoSearchResult.Repo>> forksRequest = githubApiClient.getForks(owner, name,
+                    githubApiClientProperties.getToken());
+            Response<List<RepoSearchResult.Repo>> forksResponse = forksRequest.execute();
+            return forksResponse.body();
+        } catch (IOException e) {
             throw new AssertionError("Unable to get forks");
         }
     }

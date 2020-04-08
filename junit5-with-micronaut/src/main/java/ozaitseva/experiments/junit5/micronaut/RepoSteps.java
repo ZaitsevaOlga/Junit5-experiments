@@ -1,11 +1,12 @@
 package ozaitseva.experiments.junit5.micronaut;
 
-import io.micronaut.http.client.exceptions.HttpClientResponseException;
 import io.qameta.allure.Step;
-import io.reactivex.Single;
 import lombok.RequiredArgsConstructor;
+import retrofit2.Call;
+import retrofit2.Response;
 
 import javax.inject.Singleton;
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -13,14 +14,17 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @Singleton
 @RequiredArgsConstructor
 class RepoSteps {
+
+    private final GithubApiClientProperties githubApiClientProperties;
     private final GithubApiClient githubApiClient;
 
     @Step("When searching for repo {q}")
     RepoSearchResult whenSearchRepo(String q) {
         try {
-            Single<RepoSearchResult> request = githubApiClient.searchRepo(q);
-            return request.blockingGet();
-        } catch (HttpClientResponseException e) {
+            Call<RepoSearchResult> request = githubApiClient.searchRepo(githubApiClientProperties.getToken(), q);
+            Response<RepoSearchResult> result = request.execute();
+            return result.body();
+        } catch (IOException e) {
             throw new AssertionError("Unable to search repo");
         }
     }

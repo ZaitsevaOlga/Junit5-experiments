@@ -10,6 +10,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static ozaitseva.experiments.junit5.vanila.StepsParameterResolver.GITHUB_TOKEN;
 
 @RequiredArgsConstructor
 class ForkSteps {
@@ -18,7 +19,8 @@ class ForkSteps {
     @Step("When getting forks for repo {owner}/{name}")
     List<RepoSearchResult.Repo> whenGetForks(String owner, String name) {
         try {
-            Call<List<RepoSearchResult.Repo>> forksRequest = githubApiClient.getForks(owner, name);
+            Call<List<RepoSearchResult.Repo>> forksRequest = githubApiClient.getForks(owner, name,
+                    GITHUB_TOKEN);
             Response<List<RepoSearchResult.Repo>> forksResponse = forksRequest.execute();
             return forksResponse.body();
         } catch (IOException e) {

@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static ozaitseva.experiments.junit5.vanila.StepsParameterResolver.GITHUB_TOKEN;
 
 @RequiredArgsConstructor
 class RepoSteps {
@@ -17,7 +18,7 @@ class RepoSteps {
     @Step("When searching for repo {q}")
     RepoSearchResult whenSearchRepo(String q) {
         try {
-            Call<RepoSearchResult> request = githubApiClient.searchRepo(q);
+            Call<RepoSearchResult> request = githubApiClient.searchRepo(GITHUB_TOKEN, q);
             Response<RepoSearchResult> result = request.execute();
             return result.body();
         } catch (IOException e) {

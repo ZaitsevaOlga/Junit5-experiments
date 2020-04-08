@@ -1,23 +1,24 @@
 package ozaitseva.experiments.junit5.micronaut;
 
-import io.micronaut.http.annotation.Get;
-import io.micronaut.http.annotation.Header;
-import io.micronaut.http.annotation.PathVariable;
-import io.micronaut.http.annotation.QueryValue;
-import io.micronaut.http.client.annotation.Client;
-import io.reactivex.Single;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.http.GET;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 import java.util.List;
 
-@Client("https://api.github.com/")
-@Header(name = "User-Agent", value = "test")
-public interface GithubApiClient {
-    @Get("/")
-    Single<String> smokeCheck();
+interface GithubApiClient {
 
-    @Get("/search/repositories")
-    Single<RepoSearchResult> searchRepo(@QueryValue(value = "q") String query);
+    @GET("/")
+    Call<ResponseBody> smokeCheck(@Query(value = "access_token") String token);
 
-    @Get("/repos/{owner}/{repo}/forks")
-    Single<List<RepoSearchResult.Repo>> getForks(@PathVariable String owner, @PathVariable String repo);
+    @GET("/search/repositories")
+    Call<RepoSearchResult> searchRepo(@Query(value = "access_token") String token,
+                                      @Query(value = "q") String query);
+
+    @GET("/repos/{owner}/{repo}/forks")
+    Call<List<RepoSearchResult.Repo>> getForks(@Path("owner") String owner,
+                                               @Path("repo") String repo,
+                                               @Query(value = "access_token") String token);
 }

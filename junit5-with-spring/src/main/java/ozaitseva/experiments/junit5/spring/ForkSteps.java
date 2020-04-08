@@ -15,12 +15,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @Component
 @RequiredArgsConstructor
 class ForkSteps {
-    private final GithubApiClient githubApiService;
+
+    private final GithubApiClientProperties githubApiClientProperties;
+    private final GithubApiClient githubApiClient;
 
     @Step("When getting forks for repo {owner}/{name}")
     List<RepoSearchResult.Repo> whenGetForks(String owner, String name) {
         try {
-            Call<List<RepoSearchResult.Repo>> forksRequest = githubApiService.getForks(owner, name);
+            Call<List<RepoSearchResult.Repo>> forksRequest = githubApiClient.getForks(owner, name,
+                    githubApiClientProperties.getToken());
             Response<List<RepoSearchResult.Repo>> forksResponse = forksRequest.execute();
             return forksResponse.body();
         } catch (IOException e) {

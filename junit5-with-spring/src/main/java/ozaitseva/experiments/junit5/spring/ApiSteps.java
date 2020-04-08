@@ -14,15 +14,17 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 @RequiredArgsConstructor
 class ApiSteps {
 
-    private final GithubApiClient githubApiService;
+    private final GithubApiClientProperties githubApiClientProperties;
+    private final GithubApiClient githubApiClient;
 
     @Step("Given github endpoint available")
     void givenGithubEndpointAvailable() {
         assumeTrue(() -> {
-            Call<ResponseBody> request = githubApiService.smokeCheck();
+            Call<ResponseBody> request = githubApiClient.smokeCheck(githubApiClientProperties.getToken());
             try {
                 return request.execute().isSuccessful();
             } catch (IOException e) {
+                System.out.println("Github API is not available");
                 return false;
             }
         }, "Github API is not available");

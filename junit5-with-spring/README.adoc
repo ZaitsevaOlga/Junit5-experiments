@@ -27,17 +27,20 @@ Preparing executable jar for test execution with _spring-boot-maven-plugin_
 === How to run
 1. `mvn clean package` - to build the project and prepare jar
 2. `java -javaagent:"org/aspectj/aspectjweaver/1.9.5/aspectjweaver-1.9.5.jar" -jar target/junit5-with-spring-1.0-SNAPSHOT.jar` - to start execution
+
+NOTE: add _-Dgithub.token=<your_token>_ to make authorized requests to Github api as a workaround for request limits (https://developer.github.com/v3/#rate-limiting[see more about github limits)]
+
 3. `mvn allure:report` - to generate allure report
 
 NOTE: _Aspectjweaver_ is required for correct allure reporting. Without it BDD-style steps will be missed in the report
 
 === Found issues
 * Used empty package for test selector. Some specific package name is not working when running jar. Looks like spring repackage changes it in some way that Junit launcher can not find this package.
-* Required to specify java version for maven compiler. By default java5 was used
 * Required dependency. Unneeded in case of no-Spring.
 
     <dependency>
         <groupId>org.junit.platform</groupId>
         <artifactId>junit-platform-engine</artifactId>
     </dependency>
+
 * Used dirty solution with ApplicationContext saved in static variable to be able to use it from _SpringParameterResolver.java_. The reason is an unavailability to extend Junit5 tests with instance of class.

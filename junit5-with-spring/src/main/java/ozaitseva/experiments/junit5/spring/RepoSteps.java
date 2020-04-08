@@ -14,12 +14,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @Component
 @RequiredArgsConstructor
 class RepoSteps {
-    private final GithubApiClient githubApiService;
+
+    private final GithubApiClientProperties githubApiClientProperties;
+    private final GithubApiClient githubApiClient;
 
     @Step("When searching for repo {q}")
     RepoSearchResult whenSearchRepo(String q) {
         try {
-            Call<RepoSearchResult> request = githubApiService.searchRepo(q);
+            Call<RepoSearchResult> request = githubApiClient.searchRepo(githubApiClientProperties.getToken(), q);
             Response<RepoSearchResult> result = request.execute();
             return result.body();
         } catch (IOException e) {

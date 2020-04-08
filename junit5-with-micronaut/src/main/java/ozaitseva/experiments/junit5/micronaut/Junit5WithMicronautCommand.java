@@ -22,7 +22,11 @@ public class Junit5WithMicronautCommand implements Runnable {
     public static ApplicationContext context;
 
     public static void main(String[] args) throws Exception {
+        long startTime = System.nanoTime();
         PicocliRunner.run(Junit5WithMicronautCommand.class, args);
+        long endTime = System.nanoTime();
+        long totalTime = endTime - startTime;
+        System.out.println("Execution time: " + totalTime);
     }
 
     @Inject

@@ -8,13 +8,17 @@ import retrofit2.http.Query;
 
 import java.util.List;
 
-public interface GithubApiClient {
+interface GithubApiClient {
+
     @GET("/")
-    Call<ResponseBody> smokeCheck();
+    Call<ResponseBody> smokeCheck(@Query(value = "access_token") String token);
 
     @GET("/search/repositories")
-    Call<RepoSearchResult> searchRepo(@Query(value = "q") String query);
+    Call<RepoSearchResult> searchRepo(@Query(value = "access_token") String token,
+                                      @Query(value = "q") String query);
 
     @GET("/repos/{owner}/{repo}/forks")
-    Call<List<RepoSearchResult.Repo>> getForks(@Path("owner") String owner, @Path("repo") String repo);
+    Call<List<RepoSearchResult.Repo>> getForks(@Path("owner") String owner,
+                                               @Path("repo") String repo,
+                                               @Query(value = "access_token") String token);
 }

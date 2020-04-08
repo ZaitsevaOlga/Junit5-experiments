@@ -24,6 +24,9 @@ Preparing executable jar with dependencies for test execution with _maven-assemb
 === How to run
 1. `mvn clean package` - to build the project and prepare jar
 2. `java -javaagent:"org/aspectj/aspectjweaver/1.9.5/aspectjweaver-1.9.5.jar" -jar target/junit5-vanila-java-1.0-SNAPSHOT-jar-with-dependencies.jar` - to start execution
+
+NOTE: add _-Dgithub.token=<your_token>_ to make authorized requests to Github api as a workaround for request limits (https://developer.github.com/v3/#rate-limiting[see more about github limits)]
+
 3. `mvn allure:report` - to generate allure report
 
 NOTE: _Aspectjweaver_ is required for correct allure reporting. Without it BDD-style steps will be missed in the report
